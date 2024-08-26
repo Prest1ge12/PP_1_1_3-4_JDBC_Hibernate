@@ -20,6 +20,7 @@ public class UserDaoJDBCImpl implements UserDao {
             connection = getConnection();
             System.out.println("Соединение установлено!");
         } catch (SQLException e) {
+            System.out.println("Ошибка установки соединения!");
             throw new RuntimeException(e);
         }
     }
@@ -49,6 +50,7 @@ public class UserDaoJDBCImpl implements UserDao {
                 System.out.println("Соединение уже было закрыто!");
             }
         } catch (SQLException e) {
+            System.out.println("Ошибка при закрытии соединения!");
             throw new RuntimeException(e);
         }
     }
@@ -68,6 +70,7 @@ public class UserDaoJDBCImpl implements UserDao {
                 System.out.println("Соединение уже установленно!");
             }
         } catch (SQLException e) {
+            System.out.println("Ошибка установки соединения!");
             throw new RuntimeException(e);
         }
     }
@@ -90,6 +93,7 @@ public class UserDaoJDBCImpl implements UserDao {
             }
 
         } catch (SQLException e) {
+            System.out.println("Возникли проблемы с получением данных из БД");
             throw new RuntimeException(e);
         }
     }
@@ -106,6 +110,7 @@ public class UserDaoJDBCImpl implements UserDao {
             }
 
         } catch (SQLException e) {
+            System.out.println("Не возможно удалить таблицу, возникли проблемы с получением данных из БД");
             throw new RuntimeException(e);
         }
     }
@@ -118,7 +123,7 @@ public class UserDaoJDBCImpl implements UserDao {
                 statement.executeUpdate(SQL);
                 System.out.println("User с именем — " + name + " добавлен в базу данных");
             } catch (SQLException e) {
-                System.out.println("User с именем — " + name + " не добавлен в базу данных");
+                System.out.println("User с именем — " + name + " не добавлен в базу данных, возникли проблемы с получением данных из БД");
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -135,6 +140,7 @@ public class UserDaoJDBCImpl implements UserDao {
                 System.out.println("User с id — " + id + " не удалён из базы данных");
             }
         } catch (SQLException e) {
+            System.out.println("User с id — " + id + " не был удалён из базы данных, возникли проблемы с получением данных из БД");
             throw new RuntimeException(e);
         }
     }
@@ -159,6 +165,7 @@ public class UserDaoJDBCImpl implements UserDao {
             }
 
         } catch (SQLException e) {
+            System.out.println("Ошибка получения списка User-s, возникли проблемы с получением данных из БД");
             throw new RuntimeException(e);
         }
         return users;
@@ -174,6 +181,7 @@ public class UserDaoJDBCImpl implements UserDao {
                 System.out.println("Ошибка очистки таблицы");
             }
         } catch (SQLException e) {
+            System.out.println("Ошибка очистки таблицы, возникли проблемы с получением данных из БД");
             throw new RuntimeException(e);
         }
     }
