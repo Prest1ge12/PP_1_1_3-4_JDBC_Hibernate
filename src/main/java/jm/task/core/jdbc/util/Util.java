@@ -10,6 +10,7 @@ public class Util {
     private static final String bdSrc = "jdbc:mysql://localhost:3306/testbd";
     private static final String user = "Mrangel";
     private static final String password = "root";
+    private static final String NameOfDb = "testbd";
 
     private Util() {
     }
@@ -18,6 +19,10 @@ public class Util {
         Connection connection = null;
         connection = DriverManager.getConnection(bdSrc, user, password);
         return connection;
+    }
+
+    public static String getNameOfDb() {
+        return NameOfDb;
     }
 }
 
