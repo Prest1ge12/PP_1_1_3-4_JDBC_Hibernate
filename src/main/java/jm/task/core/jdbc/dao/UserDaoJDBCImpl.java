@@ -74,18 +74,13 @@ public class UserDaoJDBCImpl implements UserDao {
     public void createUsersTable() {
 
         try (Statement statement = connection.createStatement()) {
-            /*Данный try нужен в случае если таблица уже существует*/
-            try {
-                String SQL = "CREATE TABLE `" + NameOfDb + "`.`users` ("
-                        + "`id` BIGINT NOT NULL AUTO_INCREMENT, "
-                        + "`name` VARCHAR(45) NOT NULL, "
-                        + "`lastname` VARCHAR(45) NOT NULL, "
-                        + "`age` TINYINT NOT NULL, "
-                        + "PRIMARY KEY (`id`))";
-                statement.executeUpdate(SQL);
-            } catch (SQLException e) {
-                System.out.println("Таблица уже созданна!");
-            }
+            String SQL = "CREATE TABLE IF NOT EXISTS`" + NameOfDb + "`.`users` ("
+                    + "`id` BIGINT NOT NULL AUTO_INCREMENT, "
+                    + "`name` VARCHAR(45) NOT NULL, "
+                    + "`lastname` VARCHAR(45) NOT NULL, "
+                    + "`age` TINYINT NOT NULL, "
+                    + "PRIMARY KEY (`id`))";
+            statement.executeUpdate(SQL);
         } catch (SQLException e) {
             System.out.println("Возникли проблемы с получением данных из БД");
             throw new RuntimeException(e);
@@ -96,13 +91,8 @@ public class UserDaoJDBCImpl implements UserDao {
     @Override
     public void dropUsersTable() {
         try (Statement statement = connection.createStatement()) {
-            /*Данный try нужен в случае если таблица отсутствует*/
-            try {
-            String SQL = "DROP TABLE `" + NameOfDb + "`.`users`;";;
+            String SQL = "DROP TABLE IF EXISTS`" + NameOfDb + "`.`users`;";
             statement.executeUpdate(SQL);
-            } catch (SQLException e) {
-                System.out.println("Таблицы не существует!");
-            }
         } catch (SQLException e) {
             System.out.println("Не возможно удалить таблицу, возникли проблемы с получением данных из БД");
             throw new RuntimeException(e);
