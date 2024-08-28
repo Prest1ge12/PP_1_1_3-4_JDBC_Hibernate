@@ -80,7 +80,10 @@ public class UserDaoJDBCImpl implements UserDao {
                     + "`lastname` VARCHAR(45) NOT NULL, "
                     + "`age` TINYINT NOT NULL, "
                     + "PRIMARY KEY (`id`))";
-            statement.executeUpdate(SQL);
+            int resultSet = statement.executeUpdate(SQL);
+            if (resultSet != 0) {
+                System.out.println("Таблица не была создана");
+            }
         } catch (SQLException e) {
             System.out.println("Возникли проблемы с получением данных из БД");
             throw new RuntimeException(e);
@@ -92,7 +95,10 @@ public class UserDaoJDBCImpl implements UserDao {
     public void dropUsersTable() {
         try (Statement statement = connection.createStatement()) {
             String SQL = "DROP TABLE IF EXISTS`" + NameOfDb + "`.`users`;";
-            statement.executeUpdate(SQL);
+            int resultSet = statement.executeUpdate(SQL);
+            if (resultSet != 0) {
+                System.out.println("Таблица не была удалена");
+            }
         } catch (SQLException e) {
             System.out.println("Не возможно удалить таблицу, возникли проблемы с получением данных из БД");
             throw new RuntimeException(e);
@@ -103,8 +109,10 @@ public class UserDaoJDBCImpl implements UserDao {
     public void saveUser(String name, String lastName, byte age) {
         try (Statement statement = connection.createStatement()) {
             String SQL = "INSERT INTO users VALUES( id ,'" + name + "','" + lastName + "','" + age + "')";
-            statement.executeUpdate(SQL);
-            System.out.println("User с именем — " + name + " добавлен в базу данных");
+            int resultSet = statement.executeUpdate(SQL);
+            if (resultSet != 0) {
+                System.out.println("User с именем — " + name + " добавлен в базу данных");
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -113,8 +121,11 @@ public class UserDaoJDBCImpl implements UserDao {
     @Override
     public void removeUserById(long id) {
         try (Statement statement = connection.createStatement()) {
-            String SQL = "DELETE fROM users where id";
-            statement.executeUpdate(SQL);
+            String SQL = "DELETE fROM users where id = '" + id + "'";
+            int resultSet = statement.executeUpdate(SQL);
+            if (resultSet == 0) {
+                System.out.println("User с id — " + id + " не удалён, так как отсутствует в базе");
+            }
         } catch (SQLException e) {
             System.out.println("User с id — " + id + " не был удалён из базы данных, возникли проблемы с получением данных из БД");
             throw new RuntimeException(e);
@@ -127,13 +138,17 @@ public class UserDaoJDBCImpl implements UserDao {
         String SQL = "SELECT * FROM users";
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(SQL);) {
-            while (resultSet.next()) {
-                User user = new User();
-                user.setId(resultSet.getLong("id"));
-                user.setName(resultSet.getString("name"));
-                user.setLastName(resultSet.getString("lastname"));
-                user.setAge(resultSet.getByte("age"));
-                users.add(user);
+            if (resultSet != null) {
+                while (resultSet.next()) {
+                    User user = new User();
+                    user.setId(resultSet.getLong("id"));
+                    user.setName(resultSet.getString("name"));
+                    user.setLastName(resultSet.getString("lastname"));
+                    user.setAge(resultSet.getByte("age"));
+                    users.add(user);
+                }
+            } else {
+                System.out.println("В таблице отсутствуют User-s");
             }
         } catch (SQLException e) {
             System.out.println("Ошибка получения списка User-s, возникли проблемы с получением данных из БД");
@@ -146,7 +161,10 @@ public class UserDaoJDBCImpl implements UserDao {
     public void cleanUsersTable() {
         try (Statement statement = connection.createStatement()) {
             String SQL = "DELETE fROM users";
-            statement.executeUpdate(SQL);
+            int resultSet = statement.executeUpdate(SQL);
+            if (resultSet == 0) {
+                System.out.println("Нечего удалаять, таблица пустая...");
+            }
         } catch (SQLException e) {
             System.out.println("Ошибка очистки таблицы, возникли проблемы с получением данных из БД");
             throw new RuntimeException(e);

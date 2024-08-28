@@ -11,6 +11,7 @@ public class Main {
         // реализуйте алгоритм здесь
 
         UserService userService = new UserServiceImpl();
+
         userService.createUsersTable();
 
         userService.saveUser("Вася", "Васильев", (byte) 22);
@@ -28,6 +29,7 @@ public class Main {
                 userService.removeUserById(id);
             }
         }
+
         userService.dropUsersTable();
 
         getInstance().closeConnection(); // закрытие соединения с бд
